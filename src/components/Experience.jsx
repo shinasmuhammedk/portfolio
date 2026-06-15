@@ -147,7 +147,7 @@ const Experience = () => {
                                         {/* Big title */}
                                         <div className="overflow-hidden leading-[0.85]">
                                             <h3
-                                                className="text-[9vw] sm:text-[5.5vw] lg:text-[3.6vw] font-black tracking-tighter uppercase text-brand-light group-hover:text-brand-accent transition-colors duration-300 will-change-transform"
+                                                className="text-[8.5vw] sm:text-[5.5vw] lg:text-[3.6vw] font-black tracking-tighter uppercase text-brand-light group-hover:text-brand-accent transition-colors duration-300 will-change-transform"
                                                 style={{ fontFamily: "'Syne', sans-serif" }}
                                             >
                                                 {item.title}
@@ -155,7 +155,7 @@ const Experience = () => {
                                         </div>
                                         <div className="overflow-hidden leading-[0.85]">
                                             <h3
-                                                className="text-[9vw] sm:text-[5.5vw] lg:text-[3.6vw] font-black tracking-tighter uppercase will-change-transform"
+                                                className="text-[8.5vw] sm:text-[5.5vw] lg:text-[3.6vw] font-black tracking-tighter uppercase will-change-transform"
                                                 style={{
                                                     fontFamily: "'Syne', sans-serif",
                                                     WebkitTextStroke: '1.5px rgba(240,253,244,0.25)',
@@ -196,7 +196,7 @@ const Experience = () => {
                                 </div>
 
                                 {/* Hover arrow */}
-                                <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-300">
+                                <div className="hidden lg:block absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-300">
                                     <ArrowUpRight size={14} className="text-brand-accent" />
                                 </div>
                             </div>

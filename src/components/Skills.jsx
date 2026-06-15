@@ -117,7 +117,7 @@ const Skills = () => {
             {/* ── Watermark ── */}
             <div className="skills-watermark absolute top-0 left-0 select-none pointer-events-none z-0 overflow-hidden leading-none">
                 <span
-                    className="text-[22vw] font-black tracking-tighter uppercase"
+                    className="text-[18vw] md:text-[22vw] font-black tracking-tighter uppercase"
                     style={{
                         fontFamily: "'Syne', sans-serif",
                         WebkitTextStroke: '1px rgba(255,255,255,0.04)',
@@ -241,17 +241,22 @@ const Skills = () => {
 
                                         <div className={`
                                             overflow-hidden transition-all duration-500
-                                            ${isActive ? 'max-h-24 mt-4 opacity-100' : 'max-h-0 opacity-0'}
+                                            ${isActive ? 'max-h-60 mt-4 opacity-100' : 'max-h-0 opacity-0'}
                                         `}>
-                                            <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
-                                                {skill.tools.map(tool => (
-                                                    <span 
-                                                        key={tool}
-                                                        className="px-2 py-0.5 text-[0.58rem] tracking-[0.12em] uppercase rounded-full border border-brand-accent/10 text-brand-accent/60 bg-brand-accent/5 font-light"
-                                                    >
-                                                        {tool}
-                                                    </span>
-                                                ))}
+                                            <div className="pt-3 border-t border-white/5 space-y-3">
+                                                <p className="text-[0.78rem] text-white/50 leading-relaxed font-light lg:hidden">
+                                                    {skill.desc}
+                                                </p>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {skill.tools.map(tool => (
+                                                        <span 
+                                                            key={tool}
+                                                            className="px-2 py-0.5 text-[0.58rem] tracking-[0.12em] uppercase rounded-full border border-brand-accent/10 text-brand-accent/60 bg-brand-accent/5 font-light"
+                                                        >
+                                                            {tool}
+                                                        </span>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -261,7 +266,7 @@ const Skills = () => {
                     </div>
 
                     {/* RIGHT: Active Skill Detail */}
-                    <div className="lg:col-span-5 skills-details-panel lg:sticky lg:top-28">
+                    <div className="hidden lg:block lg:col-span-5 skills-details-panel lg:sticky lg:top-28">
                         <div className="relative border border-white/8 bg-brand-dark/40 backdrop-blur-sm p-6 sm:p-8 rounded-lg overflow-hidden">
                             <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-brand-accent/30" />
                             <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-brand-accent/30" />

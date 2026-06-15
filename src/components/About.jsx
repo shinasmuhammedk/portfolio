@@ -84,7 +84,7 @@ const About = () => {
             {/* ── Watermark ── */}
             <div className="about-watermark absolute top-0 left-0 select-none pointer-events-none z-0 overflow-hidden leading-none">
                 <span
-                    className="text-[22vw] font-black tracking-tighter uppercase"
+                    className="text-[18vw] md:text-[22vw] font-black tracking-tighter uppercase"
                     style={{
                         fontFamily: "'Syne', sans-serif",
                         WebkitTextStroke: '1px rgba(255,255,255,0.04)',
@@ -147,13 +147,13 @@ const About = () => {
                             <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full border border-white/6 pointer-events-none" />
                         </div>
                     
-                        <div className="about-stats-row flex gap-0 divide-x divide-white/8 mt-12">
+                        <div className="about-stats-row grid grid-cols-3 divide-x divide-white/8 mt-12 w-full">
                             {stats.map((stat, idx) => (
-                                <div key={idx} className="about-stat group cursor-default px-8 first:pl-0 last:pr-0">
-                                    <div className="text-[2.4rem] font-black tracking-tighter text-brand-light group-hover:text-brand-accent transition-colors duration-300 leading-none mb-1" style={{ fontFamily: "'Syne', sans-serif" }}>
+                                <div key={idx} className="about-stat group cursor-default px-2 sm:px-6 md:px-8 first:pl-0 last:pr-0 text-center sm:text-left">
+                                    <div className="text-[1.8rem] sm:text-[2.4rem] font-black tracking-tighter text-brand-light group-hover:text-brand-accent transition-colors duration-300 leading-none mb-1" style={{ fontFamily: "'Syne', sans-serif" }}>
                                         {stat.value}
                                     </div>
-                                    <div className="text-[0.58rem] tracking-[0.22em] uppercase text-white/25 leading-tight">
+                                    <div className="text-[0.5rem] sm:text-[0.58rem] tracking-[0.18em] sm:tracking-[0.22em] uppercase text-white/25 leading-tight">
                                         {stat.label}
                                     </div>
                                 </div>

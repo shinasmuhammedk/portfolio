@@ -51,60 +51,92 @@ const Projects = () => {
                   scrollTrigger: { trigger: containerRef.current, start: 'top 80%' } }
             );
 
-            // Initial card stack state
-            cardsRef.current.forEach((card, i) => {
-                if (!card) return;
-                gsap.set(card, {
-                    y: i * 18,
-                    scale: 1 - i * 0.04,
-                    opacity: i === 0 ? 1 : Math.max(0.35, 0.8 - i * 0.25),
-                    zIndex: projects.length - i,
-                    transformOrigin: 'center top',
+            const mm = gsap.matchMedia();
+
+            // Desktop-only (min-width: 1024px) scroll stack animation
+            mm.add("(min-width: 1024px)", () => {
+                // Initial card stack state
+                cardsRef.current.forEach((card, i) => {
+                    if (!card) return;
+                    gsap.set(card, {
+                        y: i * 18,
+                        scale: 1 - i * 0.04,
+                        opacity: i === 0 ? 1 : Math.max(0.35, 0.8 - i * 0.25),
+                        zIndex: projects.length - i,
+                        transformOrigin: 'center top',
+                    });
+                });
+
+                // Scroll-pinned stack
+                ScrollTrigger.create({
+                    trigger: '.projects-stack-zone',
+                    start: 'top top',
+                    end: `+=${projects.length * 120}%`,
+                    pin: true,
+                    scrub: 0.9,
+                    onUpdate: (self) => {
+                        const progress = self.progress;
+                        const activeIndex = Math.min(
+                            Math.floor(progress * projects.length),
+                            projects.length - 1
+                        );
+                        setCurrentCard(activeIndex);
+
+                        cardsRef.current.forEach((card, i) => {
+                            if (!card) return;
+                            const cardProgress = progress * projects.length - i;
+
+                            if (cardProgress > 0) {
+                                const exit = Math.min(cardProgress, 1.3);
+                                gsap.to(card, {
+                                    y: -120 * exit,
+                                    rotateX: -18 * exit,
+                                    opacity: Math.max(0, 1 - exit * 1.1),
+                                    scale: 1 - exit * 0.025,
+                                    duration: 0.15,
+                                    overwrite: 'auto',
+                                });
+                            } else {
+                                const stackPos = Math.abs(cardProgress);
+                                gsap.to(card, {
+                                    y: stackPos * 18,
+                                    rotateX: 0,
+                                    opacity: stackPos === 0 ? 1 : Math.max(0.25, 0.75 - stackPos * 0.25),
+                                    scale: 1 - stackPos * 0.04,
+                                    duration: 0.15,
+                                    overwrite: 'auto',
+                                });
+                            }
+                        });
+                    },
                 });
             });
 
-            // Scroll-pinned stack
-            ScrollTrigger.create({
-                trigger: '.projects-stack-zone',
-                start: 'top top',
-                end: `+=${projects.length * 120}%`,
-                pin: true,
-                scrub: 0.9,
-                onUpdate: (self) => {
-                    const progress = self.progress;
-                    const activeIndex = Math.min(
-                        Math.floor(progress * projects.length),
-                        projects.length - 1
-                    );
-                    setCurrentCard(activeIndex);
-
-                    cardsRef.current.forEach((card, i) => {
-                        if (!card) return;
-                        const cardProgress = progress * projects.length - i;
-
-                        if (cardProgress > 0) {
-                            const exit = Math.min(cardProgress, 1.3);
-                            gsap.to(card, {
-                                y: -120 * exit,
-                                rotateX: -18 * exit,
-                                opacity: Math.max(0, 1 - exit * 1.1),
-                                scale: 1 - exit * 0.025,
-                                duration: 0.15,
-                                overwrite: 'auto',
-                            });
-                        } else {
-                            const stackPos = Math.abs(cardProgress);
-                            gsap.to(card, {
-                                y: stackPos * 18,
-                                rotateX: 0,
-                                opacity: stackPos === 0 ? 1 : Math.max(0.25, 0.75 - stackPos * 0.25),
-                                scale: 1 - stackPos * 0.04,
-                                duration: 0.15,
-                                overwrite: 'auto',
-                            });
-                        }
+            // Mobile/Tablet-only (max-width: 1023px) scroll reveal list animations
+            mm.add("(max-width: 1023px)", () => {
+                cardsRef.current.forEach((card, i) => {
+                    if (!card) return;
+                    gsap.set(card, {
+                        y: 0,
+                        scale: 1,
+                        opacity: 0,
+                        zIndex: 1,
                     });
-                },
+
+                    gsap.fromTo(card,
+                        { y: 30, opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: 'power2.out',
+                            scrollTrigger: {
+                                trigger: card,
+                                start: 'top 85%',
+                            }
+                        }
+                    );
+                });
             });
 
         }, containerRef);
@@ -123,13 +155,14 @@ const Projects = () => {
                     <span
                         style={{
                             fontFamily: "'Syne', sans-serif",
-                            fontSize: '22vw',
+                            fontSize: '18vw',
                             fontWeight: 900,
                             WebkitTextStroke: '1px rgba(255,255,255,0.04)',
                             color: 'transparent',
                             display: 'block',
                             lineHeight: 0.85,
                         }}
+                        className="md:!text-[22vw]"
                     >
                         Work
                     </span>
@@ -176,12 +209,11 @@ const Projects = () => {
 
             {/* ── Pinned stack zone ── */}
             <div
-                className="projects-stack-zone relative bg-brand-dark overflow-hidden"
-                style={{ height: '100vh' }}
+                className="projects-stack-zone relative bg-brand-dark overflow-hidden h-auto lg:h-screen"
                 id="work"
             >
                 {/* Top-left live counter */}
-                <div className="absolute top-10 left-6 sm:left-10 xl:left-16 z-30">
+                <div className="absolute top-10 left-6 sm:left-10 xl:left-16 z-30 hidden lg:block">
                     <div className="flex items-center gap-2.5 mb-3">
                         <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />
                         <span className="text-[0.62rem] tracking-[0.25em] uppercase text-white/30 font-light">
@@ -203,22 +235,22 @@ const Projects = () => {
                 </div>
 
                 {/* Bottom scroll hint */}
-                <div className="absolute bottom-10 right-6 sm:right-10 xl:right-16 z-30 flex items-center gap-2.5 text-white/20">
+                <div className="absolute bottom-10 right-6 sm:right-10 xl:right-16 z-30 hidden lg:flex items-center gap-2.5 text-white/20">
                     <span className="text-[0.6rem] tracking-[0.25em] uppercase">Scroll to explore</span>
                     <div className="w-px h-6 bg-white/15" />
                 </div>
 
                 {/* Card stack */}
                 <div
-                    className="absolute inset-0 flex items-center justify-center"
+                    className="relative lg:absolute lg:inset-0 flex flex-col lg:items-center lg:justify-center py-20 lg:py-0 px-6 sm:px-10 xl:px-16"
                     style={{ perspective: '1200px' }}
                 >
-                    <div className="relative w-[88%] max-w-2xl" style={{ height: '460px' }}>
+                    <div className="projects-cards-wrapper relative w-full max-w-2xl flex flex-col lg:block gap-8 lg:gap-0">
                         {projects.map((project, i) => (
                             <div
                                 key={i}
                                 ref={el => cardsRef.current[i] = el}
-                                className="absolute inset-0 w-full h-full rounded-2xl border border-white/8 overflow-hidden"
+                                className="relative lg:absolute lg:inset-0 w-full h-auto lg:h-full rounded-2xl border border-white/8 overflow-hidden min-h-[380px] lg:min-h-0"
                                 style={{
                                     background: 'rgba(10,10,10,0.97)',
                                     willChange: 'transform, opacity',
@@ -241,10 +273,10 @@ const Projects = () => {
                                     </div>
 
                                     {/* Main title — Hero name treatment */}
-                                    <div className="-mt-2">
+                                    <div className="my-6 lg:-mt-2 lg:my-0">
                                         <div className="overflow-hidden leading-[0.85]">
                                             <h3
-                                                className="text-[2.2rem] sm:text-[2.8rem] md:text-[3.4rem] font-black tracking-tighter uppercase text-brand-light will-change-transform"
+                                                className="text-[2rem] sm:text-[2.8rem] md:text-[3.4rem] font-black tracking-tighter uppercase text-brand-light will-change-transform"
                                                 style={{ fontFamily: "'Syne', sans-serif" }}
                                             >
                                                 {project.title}
@@ -252,7 +284,7 @@ const Projects = () => {
                                         </div>
                                         <div className="overflow-hidden leading-[0.85]">
                                             <h3
-                                                className="text-[2.2rem] sm:text-[2.8rem] md:text-[3.4rem] font-black tracking-tighter uppercase will-change-transform"
+                                                className="text-[2rem] sm:text-[2.8rem] md:text-[3.4rem] font-black tracking-tighter uppercase will-change-transform"
                                                 style={{
                                                     fontFamily: "'Syne', sans-serif",
                                                     WebkitTextStroke: '1.5px rgba(240,253,244,0.22)',
@@ -273,10 +305,10 @@ const Projects = () => {
                                         </p>
 
                                         {/* Bottom row: stack tags + links */}
-                                        <div className="flex items-end justify-between gap-4 flex-wrap">
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
 
                                             {/* Stack tags */}
-                                            <div className="flex flex-wrap gap-1.5">
+                                            <div className="flex flex-wrap gap-1.5 max-w-xs sm:max-w-sm">
                                                 {project.stack.map((tech) => (
                                                     <span
                                                         key={tech}
@@ -288,12 +320,12 @@ const Projects = () => {
                                             </div>
 
                                             {/* Links */}
-                                            <div className="flex items-center gap-3 shrink-0">
+                                            <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto">
                                                 <a
                                                     href={project.github}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="group flex items-center gap-2 px-3.5 py-1.5 border border-white/10 rounded-full text-white/35 hover:text-white hover:border-white/25 transition-all duration-300"
+                                                    className="group flex items-center justify-center gap-2 px-3.5 py-1.5 border border-white/10 rounded-full text-white/35 hover:text-white hover:border-white/25 transition-all duration-300 flex-1 sm:flex-initial"
                                                 >
                                                     <Github size={12} />
                                                     <span className="text-[0.6rem] tracking-[0.15em] uppercase">Code</span>
@@ -302,7 +334,7 @@ const Projects = () => {
                                                     href={project.live}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="group flex items-center gap-2 px-3.5 py-1.5 border border-brand-accent/30 rounded-full text-brand-accent/60 hover:text-brand-accent hover:border-brand-accent/60 transition-all duration-300"
+                                                    className="group flex items-center justify-center gap-2 px-3.5 py-1.5 border border-brand-accent/30 rounded-full text-brand-accent/60 hover:text-brand-accent hover:border-brand-accent/60 transition-all duration-300 flex-1 sm:flex-initial"
                                                 >
                                                     <Globe size={12} />
                                                     <span className="text-[0.6rem] tracking-[0.15em] uppercase">Live</span>
@@ -320,6 +352,19 @@ const Projects = () => {
 
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap');
+                
+                @media (min-width: 1024px) {
+                    .projects-cards-wrapper {
+                        height: 460px;
+                    }
+                }
+                
+                @media (max-width: 1023px) {
+                    .projects-stack-zone {
+                        height: auto !important;
+                    }
+                }
+
                 @media (prefers-reduced-motion: reduce) {
                     .projects-stack-zone * { transition: none !important; }
                 }

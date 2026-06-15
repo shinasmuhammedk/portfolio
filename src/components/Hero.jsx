@@ -154,14 +154,14 @@ const Hero = () => {
                 <div className="flex flex-col items-start w-full">
                     <div className="overflow-hidden w-full -mt-4 sm:-mt-6 md:-mt-8">
                         <h1
-                            className="hero-name-line text-[12vw] sm:text-[9.5vw] md:text-[8.2vw] pr-4 font-black tracking-tighter leading-[0.88] text-white uppercase whitespace-nowrap will-change-transform"
+                            className="hero-name-line text-[11vw] sm:text-[9.5vw] md:text-[8.2vw] pr-4 font-black tracking-tighter leading-[0.88] text-white uppercase whitespace-nowrap will-change-transform"
                         >
                             Shinas
                         </h1>
                     </div>
                     <div className="overflow-hidden w-full">
                         <h1
-                            className="hero-name-line text-[12vw] sm:text-[9.5vw] md:text-[8.2vw] pr-4 font-black tracking-tighter leading-[0.88] uppercase whitespace-nowrap will-change-transform"
+                            className="hero-name-line text-[11vw] sm:text-[9.5vw] md:text-[8.2vw] pr-4 font-black tracking-tighter leading-[0.88] uppercase whitespace-nowrap will-change-transform"
                             style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.45)', color: 'transparent' }}
                         >
                             Muhammed

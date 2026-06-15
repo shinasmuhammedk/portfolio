@@ -89,6 +89,18 @@ const Navbar = () => {
         }
     }, [isOpen]);
 
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen]);
+
     const handleNavClick = (e, href) => {
         e.preventDefault();
         const id = href.replace('#', '');
@@ -106,30 +118,33 @@ const Navbar = () => {
 
     return (
         <>
-            {/* Floating Centered Navbar */}
-            <header 
-                ref={navRef}
+            {/* Floating Centered Navbar Wrapper */}
+            <div 
                 className={`fixed ${
-                    isVisible ? 'top-6' : 'top-[-80px]'
-                } left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full px-6 md:px-8 py-3 md:py-4 ${
-                    isScrolled 
-                        ? 'bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 shadow-2xl shadow-black/50' 
-                        : 'bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5'
-                } w-[calc(100%-2rem)] md:w-auto md:min-w-[500px]`}
+                    isVisible ? 'top-6' : 'top-[-100px]'
+                } left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-[calc(100%-2rem)] md:w-auto md:min-w-[500px]`}
             >
-                <div className="flex justify-between items-center gap-4 md:gap-12">
-                    
-                    {/* Logo */}
-                    <a 
-                        ref={logoRef}
-                        href="#home"
-                        className="text-white font-bold tracking-[0.2em] uppercase text-xs hover:text-lime-400 transition-colors duration-300 whitespace-nowrap"
-                    >
-                        SMK
-                    </a>
+                <header 
+                    ref={navRef}
+                    className={`w-full rounded-full px-6 md:px-8 py-3 md:py-4 ${
+                        isScrolled 
+                            ? 'bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 shadow-2xl shadow-black/50' 
+                            : 'bg-[#0a0a0a]/40 backdrop-blur-sm border border-white/5'
+                    }`}
+                >
+                    <div className="flex justify-between items-center gap-4 md:gap-12">
+                        
+                        {/* Logo */}
+                        <a 
+                            ref={logoRef}
+                            href="#home"
+                            className="text-white font-bold tracking-[0.2em] uppercase text-xs hover:text-lime-400 transition-colors duration-300 whitespace-nowrap"
+                        >
+                            SMK
+                        </a>
 
-                    {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-8">
+                        {/* Desktop Navigation */}
+                        <nav className="hidden md:flex items-center gap-8">
                         {navLinks.map((link, i) => (
                             <a
                                 key={link.name}
@@ -161,12 +176,13 @@ const Navbar = () => {
                     </button>
                 </div>
             </header>
+            </div>
 
             {/* Mobile Menu Overlay */}
             {isOpen && (
                 <div 
                     ref={mobileMenuRef}
-                    className="fixed inset-0 z-40 bg-[#0a0a0a] pt-24 px-8 md:hidden"
+                    className="fixed inset-0 z-40 bg-[#0a0a0a] pt-24 pb-12 px-8 overflow-y-auto md:hidden"
                 >
                     <nav className="flex flex-col gap-6">
                         {navLinks.map((link) => (
